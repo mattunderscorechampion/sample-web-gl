@@ -1,0 +1,5 @@
+.idea
+*.iml
+typings
+*.js
+*.js.map
