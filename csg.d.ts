@@ -4,5 +4,9 @@ declare class ThreeBSP {
 
     subtract(bsp: ThreeBSP): ThreeBSP;
 
-    toMesh(material: THREE.Material): THREE.Mesh;
+    union(bsp: ThreeBSP): ThreeBSP;
+
+    intersection(bsp: ThreeBSP): ThreeBSP;
+
+    toMesh(material?: THREE.Material): THREE.Mesh;
 }
