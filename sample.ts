@@ -31,8 +31,8 @@ const innerHandleBSP = new ThreeBSP(new THREE.Mesh(new THREE.CylinderGeometry(0.
 const handleBSP = outerHandleBSP.subtract(innerHandleBSP);
 const handle = handleBSP.toMesh();
 handle.rotateX(0.5 * Math.PI);
-handle.translate(1, new THREE.Vector3(1, 0, 0));
-handle.translate(-0.2, new THREE.Vector3(0, 0, 1));
+handle.translateOnAxis(new THREE.Vector3(1, 0, 0), 1);
+handle.translateOnAxis(new THREE.Vector3(0, 0, 1), -0.2);
 const translatedHandleBSP = new ThreeBSP(handle);
 
 const outerMugBSP = new ThreeBSP(new THREE.Mesh(new THREE.CylinderGeometry(1, 0.9, 2, 100)));
