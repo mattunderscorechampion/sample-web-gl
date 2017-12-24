@@ -19,15 +19,16 @@ const base = new THREE.Mesh(baseGeometry, baseMaterial);
 base.position.y = -1;
 scene.add(base);
 
-const outerCylinderGeometry = new THREE.CylinderGeometry(1, 0.9, 2, 50);
-const outerMaterial = new THREE.MeshBasicMaterial({ color: 0x009900 });
-const outerCylinder = new THREE.Mesh(outerCylinderGeometry, outerMaterial);
-scene.add(outerCylinder);
+const outerCylinderBSP = new ThreeBSP(new THREE.Mesh(new THREE.CylinderGeometry(1, 0.9, 2, 50)));
+const innerCylinderBSP = new ThreeBSP(new THREE.Mesh(new THREE.CylinderGeometry(0.95, 0.85, 2, 50)));
+const mugBSP = outerCylinderBSP.subtract(innerCylinderBSP);
+const mug = mugBSP.toMesh(new THREE.MeshBasicMaterial({ color: 0x009900 }));
+scene.add(mug);
 
-const innerCylinderGeometry = new THREE.CylinderGeometry(0.95, 0.85, 2.001, 50);
-const innerMaterial = new THREE.MeshBasicMaterial({ color: 0x331100 });
-const innerCylinder = new THREE.Mesh(innerCylinderGeometry, innerMaterial);
-scene.add(innerCylinder);
+const coffeeGeometry = new THREE.CylinderGeometry(0.95, 0.85, 1.9, 50);
+const coffeeMaterial = new THREE.MeshBasicMaterial({ color: 0x1a0800 });
+const coffee = new THREE.Mesh(coffeeGeometry, coffeeMaterial);
+scene.add(coffee);
 
 camera.position.z = 5;
 controls.update();
@@ -36,8 +37,7 @@ function animate() {
     requestAnimationFrame(animate);
 
     base.rotation.y += 0.01;
-    outerCylinder.rotation.y += 0.01;
-    innerCylinder.rotation.y += 0.01;
+    mug.rotation.y += 0.01;
 
     controls.update();
     renderer.render(scene, camera);
