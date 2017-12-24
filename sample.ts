@@ -8,14 +8,19 @@ document.body.appendChild(renderer.domElement);
 
 const controls = new THREE.OrbitControls(camera);
 
+const skyBoxGeometry = new THREE.BoxGeometry(100, 100, 100);
+const skyBoxMaterial = new THREE.MeshBasicMaterial({ color: 0xfafafa, side: THREE.BackSide });
+const skyBox = new THREE.Mesh(skyBoxGeometry, skyBoxMaterial);
+scene.add(skyBox);
+
 const geometry = new THREE.BoxGeometry(1, 1, 1);
-const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const material = new THREE.MeshBasicMaterial({ color: 0x009900 });
 const cube = new THREE.Mesh(geometry, material);
 cube.position.y = -0.4;
 scene.add(cube);
 
 const baseGeometry = new THREE.CylinderGeometry(4, 4, 0.1, 50);
-const baseMaterial = new THREE.MeshBasicMaterial({ color: 0x0000bb });
+const baseMaterial = new THREE.MeshBasicMaterial({ color: 0x000099 });
 const base = new THREE.Mesh(baseGeometry, baseMaterial);
 base.position.y = -1;
 scene.add(base);
