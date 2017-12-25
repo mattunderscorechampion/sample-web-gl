@@ -34,13 +34,9 @@ function createBase(): THREE.Mesh {
 }
 
 function createMug(withCoffee: boolean): [THREE.Mesh] {
-    const outerHandleBSP = new ThreeBSP(new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.6, 0.2, 100)));
-    const innerHandleBSP = new ThreeBSP(new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.4, 0.2, 100)));
-    const handleBSP = outerHandleBSP.subtract(innerHandleBSP);
-    const handle = handleBSP.toMesh();
-    handle.rotateX(0.5 * Math.PI);
-    handle.translateOnAxis(new THREE.Vector3(1, 0, 0), 1);
-    handle.translateOnAxis(new THREE.Vector3(0, 0, 1), -0.2);
+    const handle = new THREE.Mesh(new THREE.TorusGeometry(0.6, 0.08, 50, 50));
+    handle.translateOnAxis(new THREE.Vector3(1, 0, 0), 0.9);
+    handle.translateOnAxis(new THREE.Vector3(0, 1, 0), 0.18);
     const translatedHandleBSP = new ThreeBSP(handle);
 
     const outerMugBSP = new ThreeBSP(new THREE.Mesh(new THREE.CylinderGeometry(1, 0.9, 2, 100)));
