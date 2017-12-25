@@ -8,7 +8,7 @@ document.body.appendChild(renderer.domElement);
 
 const controls = new THREE.OrbitControls(camera);
 
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
 scene.add(ambientLight);
 
 const light = new THREE.DirectionalLight(0xffffff, 1);
@@ -21,7 +21,7 @@ const skyBox = new THREE.Mesh(skyBoxGeometry, skyBoxMaterial);
 scene.add(skyBox);
 
 const baseGeometry = new THREE.CylinderGeometry(4, 4, 0.1, 100);
-const baseMaterial = new THREE.MeshLambertMaterial({ color: 0x000099 });
+const baseMaterial = new THREE.MeshLambertMaterial({ color: 0x9bb2ff });
 const base = new THREE.Mesh(baseGeometry, baseMaterial);
 base.position.y = -1;
 scene.add(base);
@@ -38,11 +38,11 @@ const translatedHandleBSP = new ThreeBSP(handle);
 const outerMugBSP = new ThreeBSP(new THREE.Mesh(new THREE.CylinderGeometry(1, 0.9, 2, 100)));
 const innerMugBSP = new ThreeBSP(new THREE.Mesh(new THREE.CylinderGeometry(0.95, 0.85, 2, 100)));
 const mugBSP = outerMugBSP.union(translatedHandleBSP).subtract(innerMugBSP);
-const mug = mugBSP.toMesh(new THREE.MeshLambertMaterial({ color: 0x009900 }));
+const mug = mugBSP.toMesh(new THREE.MeshLambertMaterial({ color: 0x8fd88c }));
 scene.add(mug);
 
 const coffeeGeometry = new THREE.CylinderGeometry(0.95, 0.85, 1.9, 100);
-const coffeeMaterial = new THREE.MeshLambertMaterial({ color: 0x1a0800 });
+const coffeeMaterial = new THREE.MeshLambertMaterial({ color: 0x844600 });
 const coffee = new THREE.Mesh(coffeeGeometry, coffeeMaterial);
 scene.add(coffee);
 
