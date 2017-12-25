@@ -45,7 +45,11 @@ function createMug(withCoffee: boolean): [THREE.Mesh] {
 
     const outerMugBSP = new ThreeBSP(new THREE.Mesh(new THREE.CylinderGeometry(1, 0.9, 2, 100)));
     const innerMugBSP = new ThreeBSP(new THREE.Mesh(new THREE.CylinderGeometry(0.95, 0.85, 2, 100)));
-    const mugBSP = outerMugBSP.union(translatedHandleBSP).subtract(innerMugBSP);
+    const bottomBSP = new ThreeBSP(new THREE.Mesh(new THREE.CylinderGeometry(0.85, 0.85, 0.1, 100)));
+    const bottom = bottomBSP.toMesh();
+    bottom.translateOnAxis(new THREE.Vector3(0, 1, 0), -0.95);
+    const translatedBottomBSP = new ThreeBSP(bottom);
+    const mugBSP = outerMugBSP.union(translatedHandleBSP).subtract(innerMugBSP).union(translatedBottomBSP);
     const mug = mugBSP.toMesh(new THREE.MeshLambertMaterial({ color: mugColour }));
 
     const result: [THREE.Mesh] = [mug];
