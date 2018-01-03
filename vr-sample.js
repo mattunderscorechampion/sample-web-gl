@@ -6,6 +6,25 @@
     var renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
+    function tryPresentAsVR() {
+        if ('getVRDisplays' in navigator) {
+            navigator.getVRDisplays().then(function (displays) {
+                if (displays.length > 0) {
+                    console.log('VR device detected');
+                    var display = displays[0];
+                    renderer.vr.enabled = true;
+                    renderer.vr.setDevice(display);
+                    display.requestPresent([{ source: renderer.domElement }]);
+                }
+                else {
+                    console.log('No VR devices detected');
+                }
+            }, function () { return console.log('Failed to detect VR devices'); });
+        }
+        else {
+            console.log('No VR devices detected');
+        }
+    }
     function createLight() {
         var ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
         var light = new THREE.DirectionalLight(0xffffff, 1);
@@ -31,5 +50,6 @@
         renderer.render(scene, camera);
     }
     animate();
+    tryPresentAsVR();
 }());
 //# sourceMappingURL=vr-sample.js.map
