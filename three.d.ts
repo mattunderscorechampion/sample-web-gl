@@ -4794,6 +4794,10 @@ declare namespace THREE {
 
     export interface Renderer {
         domElement: HTMLCanvasElement;
+        vr: {
+            enabled: boolean;
+            setDevice(device: any);
+        };
 
         render(scene: Scene, camera: Camera): void;
         setSize(width: number, height: number, updateStyle?: boolean): void;
@@ -4871,6 +4875,11 @@ declare namespace THREE {
          * This is automatically created by the renderer in the constructor (if not provided already); you just need to add it to your page.
          */
         domElement: HTMLCanvasElement;
+
+        vr: {
+            enabled: boolean;
+            setDevice(device: any);
+        };
 
         /**
          * The HTML5 Canvas's 'webgl' context obtained from the canvas where the renderer will draw.
