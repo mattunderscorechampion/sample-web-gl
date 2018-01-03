@@ -10,6 +10,27 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
+    function tryPresentAsVR() {
+        if ('getVRDisplays' in navigator) {
+            navigator.getVRDisplays().then(displays => {
+                if (displays.length > 0) {
+                    console.log('VR device detected');
+
+                    let display = displays[0];
+                    renderer.vr.enabled = true;
+                    renderer.vr.setDevice(display);
+                    display.requestPresent([{ source: renderer.domElement }]);
+                }
+                else {
+                    console.log('No VR devices detected');
+                }
+            }, () => console.log('Failed to detect VR devices'));
+        }
+        else {
+            console.log('No VR devices detected');
+        }
+    }
+
     function createLight(): [THREE.Light] {
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
         const light = new THREE.DirectionalLight(0xffffff, 1);
@@ -45,4 +66,6 @@
     }
 
     animate();
+
+    tryPresentAsVR();
 }());
