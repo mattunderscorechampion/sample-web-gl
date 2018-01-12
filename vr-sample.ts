@@ -8,18 +8,31 @@
 
     const renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.vr.enabled = true;
     document.body.appendChild(renderer.domElement);
 
-    function tryPresentAsVR() {
+    function showEnterVR(display) {
+        renderer.vr.setDevice(display);
+        let button = document.createElement('button');
+        button.style.position = 'absolute';
+        button.style.top = '0px';
+        button.style.left = '0px';
+        button.textContent = 'Enter VR mode';
+        document.body.appendChild(button);
+        button.addEventListener('click', event => {
+            display.requestPresent([{ source: renderer.domElement }]);
+        });
+    }
+
+    function detectVR() {
         if ('getVRDisplays' in navigator) {
             navigator.getVRDisplays().then(displays => {
                 if (displays.length > 0) {
                     console.log('VR device detected');
 
                     let display = displays[0];
-                    renderer.vr.enabled = true;
-                    renderer.vr.setDevice(display);
-                    display.requestPresent([{ source: renderer.domElement }]);
+
+                    showEnterVR(display);
                 }
                 else {
                     console.log('No VR devices detected');
@@ -67,5 +80,5 @@
 
     animate();
 
-    tryPresentAsVR();
+    detectVR();
 }());
