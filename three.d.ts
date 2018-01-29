@@ -4801,6 +4801,7 @@ declare namespace THREE {
 
         render(scene: Scene, camera: Camera): void;
         setSize(width: number, height: number, updateStyle?: boolean): void;
+        animate(fn: Function);
     }
 
     export interface WebGLRendererParameters {
@@ -5089,6 +5090,8 @@ declare namespace THREE {
         supportsVertexTextures(): any;
         supportsInstancedArrays(): any;
         enableScissorTest(boolean: any): any;
+
+        animate(fn: Function);
     }
 
     export interface RenderTarget {} // not defined in the code, used in LightShadow and WebGRenderer classes

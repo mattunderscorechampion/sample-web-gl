@@ -73,12 +73,10 @@
     camera.position.z = 5;
 
     function animate() {
-        requestAnimationFrame(animate);
-
         renderer.render(scene, camera);
     }
 
-    animate();
+    renderer.animate(animate);
 
     detectVR();
 }());
