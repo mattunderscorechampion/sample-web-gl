@@ -12,7 +12,6 @@
     document.body.appendChild(renderer.domElement);
 
     function showEnterVR(display) {
-        renderer.vr.setDevice(display);
         let button = document.createElement('button');
         button.style.position = 'absolute';
         button.style.top = '0px';
@@ -20,6 +19,7 @@
         button.textContent = 'Enter VR mode';
         document.body.appendChild(button);
         button.addEventListener('click', event => {
+            renderer.vr.setDevice(display);
             display.requestPresent([{ source: renderer.domElement }]);
         });
     }
