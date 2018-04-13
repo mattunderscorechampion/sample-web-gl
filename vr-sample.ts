@@ -7,9 +7,22 @@
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
     const renderer = new THREE.WebGLRenderer({antialias: true});
+    renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.vr.enabled = true;
     document.body.appendChild(renderer.domElement);
+
+    window.addEventListener( 'vrdisplaypointerrestricted', function () {
+        if (typeof(renderer.domElement.requestPointerLock) === 'function') {
+            renderer.domElement.requestPointerLock();
+        }
+    }, false );
+
+    window.addEventListener( 'resize', function () {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize( window.innerWidth, window.innerHeight );
+    }, false );
 
     function showEnterVR(display) {
         let button = document.createElement('button');
@@ -44,10 +57,10 @@
         }
     }
 
-    function createLight(): [THREE.Light] {
+    function createLight(): THREE.Light[] {
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
         const light = new THREE.DirectionalLight(0xffffff, 1);
-        light.position.set(0, 50, 0);
+        light.position.set(0, 50, 0).normalize();
 
         return [ambientLight, light];
     }
@@ -61,7 +74,9 @@
     function createObject(): THREE.Mesh {
         const baseGeometry = new THREE.SphereGeometry(2, 100, 100);
         const baseMaterial = new THREE.MeshLambertMaterial({ color: objectColour });
-        return new THREE.Mesh(baseGeometry, baseMaterial);
+        const mesh = new THREE.Mesh(baseGeometry, baseMaterial);
+        mesh.position.set(1, 1, -5).normalize();
+        return mesh;
     }
 
     createLight().forEach(o => scene.add(o));
@@ -69,8 +84,6 @@
     scene.add(createSkyBox());
 
     scene.add(createObject());
-
-    camera.position.z = 5;
 
     function animate() {
         renderer.render(scene, camera);
