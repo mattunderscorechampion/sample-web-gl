@@ -72,7 +72,7 @@
     }
 
     function createObject(): THREE.Mesh {
-        const baseGeometry = new THREE.SphereGeometry(2, 100, 100);
+        const baseGeometry = new THREE.SphereGeometry(0.5, 100, 100);
         const baseMaterial = new THREE.MeshLambertMaterial({ color: objectColour });
         const mesh = new THREE.Mesh(baseGeometry, baseMaterial);
         mesh.position.set(1, 1, -5).normalize();
