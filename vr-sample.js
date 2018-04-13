@@ -59,7 +59,7 @@
         return new THREE.Mesh(skyBoxGeometry, skyBoxMaterial);
     }
     function createObject() {
-        var baseGeometry = new THREE.SphereGeometry(2, 100, 100);
+        var baseGeometry = new THREE.SphereGeometry(0.5, 100, 100);
         var baseMaterial = new THREE.MeshLambertMaterial({ color: objectColour });
         var mesh = new THREE.Mesh(baseGeometry, baseMaterial);
         mesh.position.set(1, 1, -5).normalize();
