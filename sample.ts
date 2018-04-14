@@ -13,7 +13,7 @@ document.body.appendChild(renderer.domElement);
 
 const controls = new THREE.OrbitControls(camera);
 
-function createLight(): [THREE.Light] {
+function createLight(): THREE.Light[] {
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     const light = new THREE.DirectionalLight(0xffffff, 1);
     light.position.set(0, 50, 0);
@@ -33,7 +33,7 @@ function createBase(): THREE.Mesh {
     return new THREE.Mesh(baseGeometry, baseMaterial);
 }
 
-function createMug(withCoffee: boolean): [THREE.Mesh] {
+function createMug(withCoffee: boolean): THREE.Mesh[] {
     const handle = new THREE.Mesh(new THREE.TorusGeometry(0.6, 0.08, 50, 50));
     handle.translateOnAxis(new THREE.Vector3(1, 0, 0), 0.9);
     handle.translateOnAxis(new THREE.Vector3(0, 1, 0), 0.18);
@@ -48,7 +48,7 @@ function createMug(withCoffee: boolean): [THREE.Mesh] {
     const mugBSP = outerMugBSP.union(translatedHandleBSP).subtract(innerMugBSP).union(translatedBottomBSP);
     const mug = mugBSP.toMesh(new THREE.MeshLambertMaterial({ color: mugColour }));
 
-    const result: [THREE.Mesh] = [mug];
+    const result: THREE.Mesh[] = [mug];
 
     if (withCoffee) {
         const coffeeGeometry = new THREE.CylinderGeometry(0.95, 0.85, 1.9, 100);
