@@ -1,7 +1,9 @@
 
 (function setupVRSample() {
     const skyColour = 0xfafafa;
-    const objectColour = 0x9bb2ff;
+    const baseColour = 0x9bb2ff;
+    const mugColour = 0x8fd88c;
+    const coffeeColour = 0x844600;
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -61,30 +63,58 @@
     function createLight(): THREE.Light[] {
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
         const light = new THREE.DirectionalLight(0xffffff, 1);
-        light.position.set(0, 50, 0).normalize();
+        light.position.set(0, 5, 0);
 
         return [ambientLight, light];
     }
 
     function createSkyBox(): THREE.Mesh {
-        const skyBoxGeometry = new THREE.SphereGeometry(100, 100, 100);
+        const skyBoxGeometry = new THREE.SphereGeometry(100, 30, 30);
         const skyBoxMaterial = new THREE.MeshLambertMaterial({ color: skyColour, side: THREE.BackSide });
         return new THREE.Mesh(skyBoxGeometry, skyBoxMaterial);
     }
 
-    function createObject(): THREE.Mesh {
-        const baseGeometry = new THREE.SphereGeometry(0.5, 100, 100);
-        const baseMaterial = new THREE.MeshLambertMaterial({ color: objectColour });
+    function createBase(): THREE.Mesh {
+        const baseGeometry = new THREE.CylinderGeometry(4, 4, 0.1, 60);
+        const baseMaterial = new THREE.MeshLambertMaterial({ color: baseColour });
         const mesh = new THREE.Mesh(baseGeometry, baseMaterial);
-        mesh.position.set(1, 1, -5).normalize();
+        mesh.position.set(0, -3, -7);
         return mesh;
     }
 
-    createLight().forEach(o => scene.add(o));
+    function createMug(withCoffee: boolean): THREE.Mesh[] {
+        const handle = new THREE.Mesh(new THREE.TorusGeometry(0.6, 0.08, 35, 35));
+        handle.translateOnAxis(new THREE.Vector3(1, 0, 0), 0.9);
+        handle.translateOnAxis(new THREE.Vector3(0, 1, 0), 0.18);
+        const translatedHandleBSP = new ThreeBSP(handle);
+
+        const outerMugBSP = new ThreeBSP(new THREE.Mesh(new THREE.CylinderGeometry(1, 0.9, 2, 60)));
+        const innerMugBSP = new ThreeBSP(new THREE.Mesh(new THREE.CylinderGeometry(0.95, 0.85, 2, 60)));
+        const bottomBSP = new ThreeBSP(new THREE.Mesh(new THREE.CylinderGeometry(0.85, 0.85, 0.1, 60)));
+        const bottom = bottomBSP.toMesh();
+        bottom.translateOnAxis(new THREE.Vector3(0, 1, 0), -0.95);
+        const translatedBottomBSP = new ThreeBSP(bottom);
+        const mugBSP = outerMugBSP.union(translatedHandleBSP).subtract(innerMugBSP).union(translatedBottomBSP);
+        const mug = mugBSP.toMesh(new THREE.MeshLambertMaterial({ color: mugColour }));
+
+        const result: [THREE.Mesh] = [mug];
+
+        if (withCoffee) {
+            const coffeeGeometry = new THREE.CylinderGeometry(0.95, 0.85, 1.9, 60);
+            const coffeeMaterial = new THREE.MeshLambertMaterial({ color: coffeeColour });
+            result.push(new THREE.Mesh(coffeeGeometry, coffeeMaterial));
+        }
+
+        result.forEach(mesh => mesh.position.set(0, -2, -7));
+
+        return result;
+    }
+
+    createLight().forEach(light => scene.add(light));
 
     scene.add(createSkyBox());
-
-    scene.add(createObject());
+    scene.add(createBase());
+    createMug(true).forEach(mesh => scene.add(mesh));
 
     function animate() {
         renderer.render(scene, camera);
