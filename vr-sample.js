@@ -1,6 +1,8 @@
 (function setupVRSample() {
     var skyColour = 0xfafafa;
-    var objectColour = 0x9bb2ff;
+    var baseColour = 0x9bb2ff;
+    var mugColour = 0x8fd88c;
+    var coffeeColour = 0x844600;
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     var renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -51,24 +53,47 @@
     function createLight() {
         var ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
         var light = new THREE.DirectionalLight(0xffffff, 1);
-        light.position.set(0, 50, 0).normalize();
+        light.position.set(0, 5, 0);
         return [ambientLight, light];
     }
     function createSkyBox() {
-        var skyBoxGeometry = new THREE.SphereGeometry(100, 100, 100);
+        var skyBoxGeometry = new THREE.SphereGeometry(100, 30, 30);
         var skyBoxMaterial = new THREE.MeshLambertMaterial({ color: skyColour, side: THREE.BackSide });
         return new THREE.Mesh(skyBoxGeometry, skyBoxMaterial);
     }
-    function createObject() {
-        var baseGeometry = new THREE.SphereGeometry(0.5, 100, 100);
-        var baseMaterial = new THREE.MeshLambertMaterial({ color: objectColour });
+    function createBase() {
+        var baseGeometry = new THREE.CylinderGeometry(4, 4, 0.1, 60);
+        var baseMaterial = new THREE.MeshLambertMaterial({ color: baseColour });
         var mesh = new THREE.Mesh(baseGeometry, baseMaterial);
-        mesh.position.set(1, 1, -5).normalize();
+        mesh.position.set(0, -3, -7);
         return mesh;
     }
-    createLight().forEach(function (o) { return scene.add(o); });
+    function createMug(withCoffee) {
+        var handle = new THREE.Mesh(new THREE.TorusGeometry(0.6, 0.08, 35, 35));
+        handle.translateOnAxis(new THREE.Vector3(1, 0, 0), 0.9);
+        handle.translateOnAxis(new THREE.Vector3(0, 1, 0), 0.18);
+        var translatedHandleBSP = new ThreeBSP(handle);
+        var outerMugBSP = new ThreeBSP(new THREE.Mesh(new THREE.CylinderGeometry(1, 0.9, 2, 60)));
+        var innerMugBSP = new ThreeBSP(new THREE.Mesh(new THREE.CylinderGeometry(0.95, 0.85, 2, 60)));
+        var bottomBSP = new ThreeBSP(new THREE.Mesh(new THREE.CylinderGeometry(0.85, 0.85, 0.1, 60)));
+        var bottom = bottomBSP.toMesh();
+        bottom.translateOnAxis(new THREE.Vector3(0, 1, 0), -0.95);
+        var translatedBottomBSP = new ThreeBSP(bottom);
+        var mugBSP = outerMugBSP.union(translatedHandleBSP).subtract(innerMugBSP).union(translatedBottomBSP);
+        var mug = mugBSP.toMesh(new THREE.MeshLambertMaterial({ color: mugColour }));
+        var result = [mug];
+        if (withCoffee) {
+            var coffeeGeometry = new THREE.CylinderGeometry(0.95, 0.85, 1.9, 60);
+            var coffeeMaterial = new THREE.MeshLambertMaterial({ color: coffeeColour });
+            result.push(new THREE.Mesh(coffeeGeometry, coffeeMaterial));
+        }
+        result.forEach(function (mesh) { return mesh.position.set(0, -2, -7); });
+        return result;
+    }
+    createLight().forEach(function (light) { return scene.add(light); });
     scene.add(createSkyBox());
-    scene.add(createObject());
+    scene.add(createBase());
+    createMug(true).forEach(function (mesh) { return scene.add(mesh); });
     function animate() {
         renderer.render(scene, camera);
     }
