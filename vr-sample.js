@@ -22,11 +22,12 @@
     }, false);
     function showEnterVR(display) {
         var button = document.createElement('button');
-        button.style.fontSize = '20';
+        button.style.fontSize = '24';
         button.style.position = 'fixed';
-        button.style.top = 'calc(50% - 14px)';
-        button.style.left = 'calc(50% - 73px)';
-        button.textContent = 'Enter VR mode';
+        button.style.bottom = '28px';
+        button.style.right = '28px';
+        button.style.padding = '10px';
+        button.textContent = 'VR';
         document.body.appendChild(button);
         button.addEventListener('click', function (event) {
             renderer.vr.setDevice(display);
