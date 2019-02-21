@@ -8,3 +8,6 @@ Compile using `tsc` and serve directory over HTTP.
 
 * [Coffee mug in WebGL](https://mattunderscorechampion.github.io/sample-web-gl/index.html)
 * [Coffee mug in VR](https://mattunderscorechampion.github.io/sample-web-gl/vr-sample.html)
+
+Licensed under MIT
+
